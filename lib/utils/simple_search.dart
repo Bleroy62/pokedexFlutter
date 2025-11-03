@@ -75,16 +75,15 @@ class SimpleSearch {
     
     final searchTerm = query.toLowerCase();
     final results = _allPokemon.where((pokemon) {
-      final String englishName = pokemon['name'].toLowerCase();
       final String frenchName = (pokemon['frenchName'] ?? '').toLowerCase();
       final String id = pokemon['id'].toString();
       
-      return englishName.contains(searchTerm) || 
-             frenchName.contains(searchTerm) || 
+      // Recherche uniquement sur le nom français et l'ID
+      return frenchName.contains(searchTerm) || 
              id.contains(searchTerm);
     }).take(10).toList();
     
-    //print("Recherche '$query': ${results.length} résultats");
+    print("Recherche '$query': ${results.length} résultats");
     return results;
   }
 }
