@@ -1,16 +1,38 @@
-# podedex_flutter
+Pokédex Flutter
+Une application Pokédex développée avec Flutter qui permet de parcourir et de rechercher des Pokémon avec leurs informations détaillées en français.
 
-A new Flutter project.
+📱 Fonctionnalités
+Navigation complète : Parcourez les 1025 Pokémon avec les boutons précédent/suivant
 
-## Getting Started
+Recherche intelligente : Recherchez par nom français ou numéro de Pokémon
 
-This project is a starting point for a Flutter application.
+Interface en français : Tous les noms, types et descriptions en français
 
-A few resources to get you started if this is your first Flutter project:
+Design authentique : Interface inspirée du Pokédex classique avec thème rouge
 
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
+Informations détaillées :
 
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+Image officielle du Pokémon
+
+Types avec codes couleurs
+
+Taille et poids
+
+Description du Pokémon
+
+🛠️ Technologies utilisées
+Flutter - Framework de développement
+
+Dart - Langage de programmation
+
+PokéAPI - API pour les données Pokémon
+
+HTTP - Pour les requêtes réseau
+
+📦 Installation
+Prérequis
+Flutter SDK (version 3.0 ou supérieure)
+
+Dart SDK
+
+Un émulateur ou appareil physique
