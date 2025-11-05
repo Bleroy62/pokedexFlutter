@@ -162,7 +162,8 @@ class _PokedexScreenState extends State<PokedexScreen> {
                       ? const Center(child: Text('Pokémon non trouvé'))
                       : SingleChildScrollView(
                         // Ajouté pour permettre le défilement
-                        padding: const EdgeInsets.all(16.0),
+                        physics: NeverScrollableScrollPhysics(),
+                        padding: const EdgeInsets.all(10.0),
                         child: Column(
                           mainAxisSize: MainAxisSize.min,
                           children: [
@@ -188,7 +189,7 @@ class _PokedexScreenState extends State<PokedexScreen> {
 
                             // pokemon image
                             Container(
-                              height: 350,
+                              height: 250,
                               decoration: BoxDecoration(
                                 color: Colors.blue[50],
                                 borderRadius: BorderRadius.circular(12),
@@ -228,11 +229,11 @@ class _PokedexScreenState extends State<PokedexScreen> {
                                       )
                                       .toList(),
                             ),
-                            const SizedBox(height: 12),
+                            const SizedBox(height: 10),
 
                             // height and weight
                             SizedBox(
-                              height: 60, // Conteneur de hauteur fixe
+                              height: 40,
                               child: Row(
                                 mainAxisAlignment:
                                     MainAxisAlignment.spaceEvenly,
@@ -248,11 +249,11 @@ class _PokedexScreenState extends State<PokedexScreen> {
                                 ],
                               ),
                             ),
-                            const SizedBox(height: 12),
+                            const SizedBox(height: 10),
 
                             // evolution line
                             if (currentPokemon!.evolutionLine.isNotEmpty) ...[
-                              const SizedBox(height: 12),
+                              const SizedBox(height: 10),
                               Text(
                                 'Évolutions',
                                 style: TextStyle(
@@ -274,7 +275,6 @@ class _PokedexScreenState extends State<PokedexScreen> {
                                             evolution.id == currentPokemon!.id;
 
                                         return GestureDetector(
-                                          // AJOUT DU GESTUREDETECTOR ICI
                                           onTap: () {
                                             setState(() {
                                               currentPokemonIndex =
@@ -422,14 +422,13 @@ class _PokedexScreenState extends State<PokedexScreen> {
                               ),
                             ],
                             const SizedBox(height: 12),
-
                             // Description
                             Container(
                               width: double.infinity,
                               constraints: BoxConstraints(
                                 minHeight: 60, // Hauteur minimale
                                 maxHeight:
-                                    100, // Hauteur maximale pour éviter débordement
+                                    80, // Hauteur maximale pour éviter débordement
                               ),
                               padding: const EdgeInsets.all(10),
                               decoration: BoxDecoration(
@@ -441,7 +440,7 @@ class _PokedexScreenState extends State<PokedexScreen> {
                                 child: Text(
                                   currentPokemon!.description,
                                   style: const TextStyle(
-                                    fontSize: 13,
+                                    fontSize: 12,
                                     fontStyle: FontStyle.italic,
                                   ),
                                   textAlign: TextAlign.center,
@@ -662,7 +661,7 @@ class _PokedexScreenState extends State<PokedexScreen> {
           Text(
             label,
             style: TextStyle(
-              fontSize: 11,
+              fontSize: 8,
               color: Colors.grey[600],
               fontWeight: FontWeight.bold,
             ),
