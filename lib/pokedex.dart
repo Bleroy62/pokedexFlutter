@@ -145,9 +145,9 @@ class _PokedexScreenState extends State<PokedexScreen> {
       ),
       body: Column(
         children: [
-          // ÉCRAN DU POKÉDEX - CORRIGÉ POUR ÉVITER LE DÉBORDEMENT
+          // pokedex screen
           Expanded(
-            flex: 3, // Augmenté pour donner plus d'espace
+            flex: 3,
             child: Container(
               margin: const EdgeInsets.all(16),
               decoration: BoxDecoration(
@@ -155,135 +155,313 @@ class _PokedexScreenState extends State<PokedexScreen> {
                 borderRadius: BorderRadius.circular(20),
                 border: Border.all(color: Colors.black, width: 4),
               ),
-              child: isLoading
-                  ? const Center(child: CircularProgressIndicator())
-                  : currentPokemon == null
+              child:
+                  isLoading
+                      ? const Center(child: CircularProgressIndicator())
+                      : currentPokemon == null
                       ? const Center(child: Text('Pokémon non trouvé'))
-                      : SingleChildScrollView( // Ajouté pour permettre le défilement
-                          padding: const EdgeInsets.all(16.0),
-                          child: Column(
-                            mainAxisSize: MainAxisSize.min,
-                            children: [
-                              // Numéro et Nom
-                              Text(
-                                currentPokemon!.formattedId,
-                                style: const TextStyle(
-                                  fontWeight: FontWeight.bold,
-                                  fontSize: 16,
-                                  color: Colors.black87,
-                                ),
+                      : SingleChildScrollView(
+                        // Ajouté pour permettre le défilement
+                        padding: const EdgeInsets.all(16.0),
+                        child: Column(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            // id and name
+                            Text(
+                              currentPokemon!.formattedId,
+                              style: const TextStyle(
+                                fontWeight: FontWeight.bold,
+                                fontSize: 16,
+                                color: Colors.black87,
                               ),
-                              const SizedBox(height: 4),
-                              Text(
-                                currentPokemon!.formattedName,
-                                style: const TextStyle(
-                                  fontSize: 22, // Légèrement réduit
-                                  fontWeight: FontWeight.bold,
-                                  color: Colors.black,
-                                ),
+                            ),
+                            const SizedBox(height: 4),
+                            Text(
+                              currentPokemon!.formattedName,
+                              style: const TextStyle(
+                                fontSize: 22,
+                                fontWeight: FontWeight.bold,
+                                color: Colors.black,
                               ),
-                              const SizedBox(height: 12),
+                            ),
+                            const SizedBox(height: 12),
 
-                              // Image du Pokémon - Taille réduite
-                              Container(
-                                height: 350, // Réduit de 200 à 150
-                                decoration: BoxDecoration(
-                                  color: Colors.blue[50],
-                                  borderRadius: BorderRadius.circular(12),
-                                  border: Border.all(color: Colors.grey),
-                                ),
-                                padding: const EdgeInsets.all(12), // Réduit
-                                child: Image.network(
-                                  currentPokemon!.imageUrl,
-                                  fit: BoxFit.contain,
-                                  errorBuilder: (context, error, stackTrace) {
-                                    return const Center(
-                                      child: Icon(Icons.error, size: 30), // Réduit
-                                    );
-                                  },
-                                ),
+                            // pokemon image
+                            Container(
+                              height: 350,
+                              decoration: BoxDecoration(
+                                color: Colors.blue[50],
+                                borderRadius: BorderRadius.circular(12),
+                                border: Border.all(color: Colors.grey),
                               ),
-                              const SizedBox(height: 12),
+                              padding: const EdgeInsets.all(12),
+                              child: Image.network(
+                                currentPokemon!.imageUrl,
+                                fit: BoxFit.contain,
+                                errorBuilder: (context, error, stackTrace) {
+                                  return const Center(
+                                    child: Icon(Icons.error, size: 30),
+                                  );
+                                },
+                              ),
+                            ),
+                            const SizedBox(height: 12),
 
-                              // Types
-                              Wrap(
-                                spacing: 6,
-                                runSpacing: 4,
-                                children: currentPokemon!.frenchTypes
-                                    .map(
-                                      (type) => Chip(
-                                        label: Text(
-                                          type[0].toUpperCase() +
-                                              type.substring(1),
-                                          style: const TextStyle(
-                                            color: Colors.white,
-                                            fontSize: 11, // Réduit
+                            // Types
+                            Wrap(
+                              spacing: 6,
+                              runSpacing: 4,
+                              children:
+                                  currentPokemon!.frenchTypes
+                                      .map(
+                                        (type) => Chip(
+                                          label: Text(
+                                            type[0].toUpperCase() +
+                                                type.substring(1),
+                                            style: const TextStyle(
+                                              color: Colors.white,
+                                              fontSize: 11, // Réduit
+                                            ),
                                           ),
+                                          backgroundColor: _getTypeColor(type),
                                         ),
-                                        backgroundColor: _getTypeColor(type),
-                                      ),
-                                    )
-                                    .toList(),
-                              ),
-                              const SizedBox(height: 12),
+                                      )
+                                      .toList(),
+                            ),
+                            const SizedBox(height: 12),
 
-                              // Taille et Poids - Hauteur réduite
-                              SizedBox(
-                                height: 60, // Conteneur de hauteur fixe
-                                child: Row(
-                                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                                  children: [
-                                    _buildStatItem(
-                                      'Taille',
-                                      '${currentPokemon!.height / 10} m',
-                                    ),
-                                    _buildStatItem(
-                                      'Poids',
-                                      '${currentPokemon!.weight / 10} kg',
-                                    ),
-                                  ],
-                                ),
-                              ),
-                              const SizedBox(height: 12),
-
-                              // Description - Hauteur adaptative
-                              Container(
-                                width: double.infinity,
-                                constraints: BoxConstraints(
-                                  minHeight: 60, // Hauteur minimale
-                                  maxHeight: 100, // Hauteur maximale pour éviter débordement
-                                ),
-                                padding: const EdgeInsets.all(10),
-                                decoration: BoxDecoration(
-                                  color: Colors.white.withOpacity(0.8),
-                                  borderRadius: BorderRadius.circular(10),
-                                  border: Border.all(color: Colors.grey[300]!),
-                                ),
-                                child: SingleChildScrollView(
-                                  child: Text(
-                                    currentPokemon!.description,
-                                    style: const TextStyle(
-                                      fontSize: 13, // Légèrement réduit
-                                      fontStyle: FontStyle.italic,
-                                    ),
-                                    textAlign: TextAlign.center,
+                            // height and weight
+                            SizedBox(
+                              height: 60, // Conteneur de hauteur fixe
+                              child: Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceEvenly,
+                                children: [
+                                  _buildStatItem(
+                                    'Taille',
+                                    '${currentPokemon!.height / 10} m',
                                   ),
+                                  _buildStatItem(
+                                    'Poids',
+                                    '${currentPokemon!.weight / 10} kg',
+                                  ),
+                                ],
+                              ),
+                            ),
+                            const SizedBox(height: 12),
+
+                            // evolution line
+                            if (currentPokemon!.evolutionLine.isNotEmpty) ...[
+                              const SizedBox(height: 12),
+                              Text(
+                                'Évolutions',
+                                style: TextStyle(
+                                  fontSize: 16,
+                                  fontWeight: FontWeight.bold,
+                                  color: Colors.red[800],
+                                ),
+                              ),
+                              const SizedBox(height: 8),
+                              Container(
+                                height: 100,
+                                child: Row(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children:
+                                      currentPokemon!.evolutionLine.map((
+                                        evolution,
+                                      ) {
+                                        final bool isCurrent =
+                                            evolution.id == currentPokemon!.id;
+
+                                        return GestureDetector(
+                                          // AJOUT DU GESTUREDETECTOR ICI
+                                          onTap: () {
+                                            setState(() {
+                                              currentPokemonIndex =
+                                                  evolution.id;
+                                            });
+                                            _loadPokemon(evolution.id);
+                                          },
+                                          child: Container(
+                                            width: 80,
+                                            margin: const EdgeInsets.symmetric(
+                                              horizontal: 4,
+                                            ),
+                                            padding: const EdgeInsets.all(6),
+                                            decoration: BoxDecoration(
+                                              color:
+                                                  isCurrent
+                                                      ? Colors.red[100]
+                                                      : Colors.white,
+                                              borderRadius:
+                                                  BorderRadius.circular(12),
+                                              border: Border.all(
+                                                color:
+                                                    isCurrent
+                                                        ? Colors.red[800]!
+                                                        : Colors.grey[300]!,
+                                                width: isCurrent ? 2 : 1,
+                                              ),
+                                              boxShadow: [
+                                                BoxShadow(
+                                                  color: Colors.black
+                                                      .withOpacity(0.1),
+                                                  blurRadius: 4,
+                                                  offset: const Offset(0, 2),
+                                                ),
+                                              ],
+                                            ),
+                                            child: Column(
+                                              mainAxisSize: MainAxisSize.min,
+                                              mainAxisAlignment:
+                                                  MainAxisAlignment.center,
+                                              children: [
+                                                // Image du Pokémon
+                                                Container(
+                                                  width: 50,
+                                                  height: 50,
+                                                  decoration: BoxDecoration(
+                                                    color: Colors.blue[50],
+                                                    borderRadius:
+                                                        BorderRadius.circular(
+                                                          25,
+                                                        ),
+                                                    border: Border.all(
+                                                      color: Colors.grey[300]!,
+                                                    ),
+                                                  ),
+                                                  child: Image.network(
+                                                    evolution.imageUrl,
+                                                    fit: BoxFit.contain,
+                                                    loadingBuilder: (
+                                                      context,
+                                                      child,
+                                                      loadingProgress,
+                                                    ) {
+                                                      if (loadingProgress ==
+                                                          null)
+                                                        return child;
+                                                      return Center(
+                                                        child: CircularProgressIndicator(
+                                                          value:
+                                                              loadingProgress
+                                                                          .expectedTotalBytes !=
+                                                                      null
+                                                                  ? loadingProgress
+                                                                          .cumulativeBytesLoaded /
+                                                                      loadingProgress
+                                                                          .expectedTotalBytes!
+                                                                  : null,
+                                                        ),
+                                                      );
+                                                    },
+                                                    errorBuilder: (
+                                                      context,
+                                                      error,
+                                                      stackTrace,
+                                                    ) {
+                                                      return Center(
+                                                        child: Text(
+                                                          evolution.formattedId
+                                                              .replaceAll(
+                                                                '#',
+                                                                '',
+                                                              ),
+                                                          style: TextStyle(
+                                                            fontSize: 8,
+                                                            fontWeight:
+                                                                FontWeight.bold,
+                                                            color:
+                                                                Colors.red[800],
+                                                          ),
+                                                        ),
+                                                      );
+                                                    },
+                                                  ),
+                                                ),
+                                                const SizedBox(height: 4),
+                                                Text(
+                                                  evolution.formattedName,
+                                                  style: TextStyle(
+                                                    fontSize: 10,
+                                                    fontWeight: FontWeight.w500,
+                                                    color:
+                                                        isCurrent
+                                                            ? Colors.red[800]
+                                                            : Colors.black87,
+                                                  ),
+                                                  textAlign: TextAlign.center,
+                                                  maxLines: 2,
+                                                  overflow:
+                                                      TextOverflow.ellipsis,
+                                                ),
+                                              ],
+                                            ),
+                                          ),
+                                        );
+                                      }).toList(),
+                                ),
+                              ),
+                            ] else ...[
+                              const SizedBox(height: 12),
+                              Container(
+                                padding: const EdgeInsets.all(8),
+                                decoration: BoxDecoration(
+                                  color: Colors.grey[100],
+                                  borderRadius: BorderRadius.circular(8),
+                                ),
+                                child: Text(
+                                  'Aucune évolution',
+                                  style: TextStyle(
+                                    fontSize: 12,
+                                    fontStyle: FontStyle.italic,
+                                    color: Colors.grey[600],
+                                  ),
+                                  textAlign: TextAlign.center,
                                 ),
                               ),
                             ],
-                          ),
+                            const SizedBox(height: 12),
+
+                            // Description
+                            Container(
+                              width: double.infinity,
+                              constraints: BoxConstraints(
+                                minHeight: 60, // Hauteur minimale
+                                maxHeight:
+                                    100, // Hauteur maximale pour éviter débordement
+                              ),
+                              padding: const EdgeInsets.all(10),
+                              decoration: BoxDecoration(
+                                color: Colors.white.withOpacity(0.8),
+                                borderRadius: BorderRadius.circular(10),
+                                border: Border.all(color: Colors.grey[300]!),
+                              ),
+                              child: SingleChildScrollView(
+                                child: Text(
+                                  currentPokemon!.description,
+                                  style: const TextStyle(
+                                    fontSize: 13,
+                                    fontStyle: FontStyle.italic,
+                                  ),
+                                  textAlign: TextAlign.center,
+                                ),
+                              ),
+                            ),
+                          ],
                         ),
+                      ),
             ),
           ),
 
-          // BARRE DE RECHERCHE - ESPACE RÉDUIT
+          // search bar
           Container(
             margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
             child: Column(
               mainAxisSize: MainAxisSize.min,
               children: [
                 Container(
-                  height: 45, // Réduit
+                  height: 45,
                   decoration: BoxDecoration(
                     color: Colors.white,
                     borderRadius: BorderRadius.circular(25),
@@ -299,14 +477,21 @@ class _PokedexScreenState extends State<PokedexScreen> {
                     controller: _searchController,
                     decoration: InputDecoration(
                       hintText: 'Rechercher un Pokémon...',
-                      hintStyle: TextStyle(color: Colors.grey[600], fontSize: 14),
+                      hintStyle: TextStyle(
+                        color: Colors.grey[600],
+                        fontSize: 14,
+                      ),
                       border: InputBorder.none,
                       contentPadding: const EdgeInsets.symmetric(
                         horizontal: 15,
                         vertical: 10,
                       ),
                       suffixIcon: IconButton(
-                        icon: Icon(Icons.search, color: Colors.red[700], size: 20),
+                        icon: Icon(
+                          Icons.search,
+                          color: Colors.red[700],
+                          size: 20,
+                        ),
                         onPressed: () => _searchPokemon(_searchController.text),
                       ),
                     ),
@@ -314,7 +499,7 @@ class _PokedexScreenState extends State<PokedexScreen> {
                   ),
                 ),
 
-                // Résultats de recherche - Hauteur réduite
+                // result resheach
                 if (_showSearchResults && _searchResults.isNotEmpty)
                   Container(
                     margin: const EdgeInsets.only(top: 5),
@@ -359,7 +544,7 @@ class _PokedexScreenState extends State<PokedexScreen> {
                                     child: Text(
                                       '#${id.toString().padLeft(3, '0')}',
                                       style: TextStyle(
-                                        fontSize: 7, // Réduit
+                                        fontSize: 7,
                                         fontWeight: FontWeight.bold,
                                         color: Colors.red[800],
                                       ),
@@ -372,19 +557,19 @@ class _PokedexScreenState extends State<PokedexScreen> {
                               frenchName,
                               style: const TextStyle(
                                 fontWeight: FontWeight.w500,
-                                fontSize: 13, // Réduit
+                                fontSize: 13,
                               ),
                             ),
                             subtitle: Text(
                               '#${id.toString().padLeft(3, '0')}',
                               style: TextStyle(
-                                fontSize: 9, // Réduit
+                                fontSize: 9,
                                 color: Colors.grey[600],
                               ),
                             ),
                             trailing: Icon(
                               Icons.arrow_forward_ios,
-                              size: 12, // Réduit
+                              size: 12,
                               color: Colors.grey[600],
                             ),
                             onTap: () => _selectPokemonFromSearch(pokemon),
@@ -397,9 +582,9 @@ class _PokedexScreenState extends State<PokedexScreen> {
             ),
           ),
 
-          // CONTROLES DE NAVIGATION - HAUTEUR RÉDUITE
+          // nav control - previus pokemon and next pokemon
           Container(
-            height: 60, // Réduit
+            height: 60,
             padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
             child: Row(
               children: [
@@ -407,7 +592,7 @@ class _PokedexScreenState extends State<PokedexScreen> {
                   child: GestureDetector(
                     onTap: previousPokemon,
                     child: Container(
-                      height: 45, // Réduit
+                      height: 45,
                       decoration: BoxDecoration(
                         color: Colors.blue,
                         borderRadius: BorderRadius.circular(10),
@@ -423,7 +608,7 @@ class _PokedexScreenState extends State<PokedexScreen> {
                       child: const Icon(
                         Icons.arrow_back,
                         color: Colors.white,
-                        size: 22, // Réduit
+                        size: 22,
                       ),
                     ),
                   ),
@@ -433,7 +618,7 @@ class _PokedexScreenState extends State<PokedexScreen> {
                   child: GestureDetector(
                     onTap: nextPokemon,
                     child: Container(
-                      height: 45, // Réduit
+                      height: 45,
                       decoration: BoxDecoration(
                         color: Colors.blue,
                         borderRadius: BorderRadius.circular(10),
@@ -449,7 +634,7 @@ class _PokedexScreenState extends State<PokedexScreen> {
                       child: const Icon(
                         Icons.arrow_forward,
                         color: Colors.white,
-                        size: 22, // Réduit
+                        size: 22,
                       ),
                     ),
                   ),

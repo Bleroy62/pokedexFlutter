@@ -7,7 +7,8 @@ class Pokemon {
   final String imageUrl;
   final int height;
   final int weight;
-  final String description; // NOUVEAU: Description française
+  final String description;
+  final List<Pokemon> evolutionLine;
 
   Pokemon({
     required this.id,
@@ -18,10 +19,17 @@ class Pokemon {
     required this.imageUrl,
     required this.height,
     required this.weight,
-    required this.description, // NOUVEAU
+    required this.description,
+    required this.evolutionLine,
   });
 
-  factory Pokemon.fromJson(Map<String, dynamic> json, {String? frenchName, List<String>? frenchTypes, String? description}) {
+  factory Pokemon.fromJson(
+    Map<String, dynamic> json, {
+    String? frenchName,
+    List<String>? frenchTypes,
+    String? description,
+    List<Pokemon>? evolutionLine,
+  }) {
     return Pokemon(
       id: json['id'],
       name: json['name'],
@@ -33,11 +41,12 @@ class Pokemon {
           (json['types'] as List)
               .map((type) => type['type']['name'] as String)
               .toList(),
-      imageUrl: json['sprites']['other']['official-artwork']['front_default'] ?? 
-                json['sprites']['front_default'],
+      imageUrl: json['sprites']['other']['official-artwork']['front_default'] ??
+          json['sprites']['front_default'],
       height: json['height'],
       weight: json['weight'],
-      description: description ?? '', // NOUVEAU
+      description: description ?? '',
+      evolutionLine: evolutionLine ?? [],
     );
   }
 

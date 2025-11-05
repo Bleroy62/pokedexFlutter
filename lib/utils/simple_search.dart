@@ -81,7 +81,7 @@ class SimpleSearch {
       // Recherche uniquement sur le nom français et l'ID
       return frenchName.contains(searchTerm) || 
              id.contains(searchTerm);
-    }).take(10).toList();
+    }).take(1025).toList();
     
     print("Recherche '$query': ${results.length} résultats");
     return results;
