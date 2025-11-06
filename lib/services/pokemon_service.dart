@@ -47,20 +47,23 @@ class PokemonService {
   }
 }
 
-  static String _getFrenchName(Map<String, dynamic> speciesData) {
-    try {
-      final names = speciesData['names'] as List;
+static String _getFrenchName(Map<String, dynamic> speciesData) {
+  try {
+    final names = speciesData['names'] as List?;
+    if (names != null) {
       for (var name in names) {
         if (name['language']['name'] == 'fr') {
           return name['name'];
         }
       }
-      return speciesData['name'];
-    } catch (e) {
-      return speciesData['name'];
     }
+  } catch (e) {
+    print('Error getting French name: $e');
   }
 
+  // Fallback: use the species 'name' field if present, otherwise a generic label
+  return speciesData['name'] ?? 'Pokémon';
+}
   static String _getFrenchDescription(Map<String, dynamic> speciesData) {
     try {
       final flavorTextEntries = speciesData['flavor_text_entries'] as List;
@@ -119,6 +122,24 @@ class PokemonService {
 
     return frenchTypes;
   }
+
+  // Dans PokemonService, ajoutez cette méthode
+static Future<String> getTypeImageUrl(String typeName) async {
+  try {
+    final response = await http.get(Uri.parse('$_baseUrl/type/$typeName'));
+    if (response.statusCode == 200) {
+      final typeData = json.decode(response.body);
+      // L'API ne fournit pas directement l'image du type dans les données de base
+      // On utilise donc une URL construite
+      return 'https://pokeapi.co/media/sprites/types/generation-viii/sword-shield/$typeName.png';
+    }
+  } catch (e) {
+    print('Error fetching type image for $typeName: $e');
+  }
+  
+  // Fallback
+  return 'https://pokeapi.co/media/sprites/types/generation-viii/sword-shield/normal.png';
+}
 
   /// Récupère toute la ligne d'évolution du Pokémon
 static Future<List<Pokemon>> _getEvolutionLine(Map<String, dynamic> speciesData) async {

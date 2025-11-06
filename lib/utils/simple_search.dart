@@ -18,31 +18,45 @@ class SimpleSearch {
         final data = json.decode(response.body);
         final results = data['results'] as List;
         
-        // Charger tous les Pokémon avec leurs IDs
-        _allPokemon = await Future.wait(results.map((pokemon) async {
+        // CORRECTION : Charger seulement les IDs et noms anglais d'abord
+        _allPokemon = results.asMap().entries.map((entry) {
+          final index = entry.key;
+          final pokemon = entry.value;
           final url = pokemon['url'] as String;
           final segments = url.split('/');
           final id = int.parse(segments[segments.length - 2]);
           
-          // Récupérer le nom français
-          final frenchName = await _getFrenchName(id);
-          
           return {
             'id': id,
             'name': pokemon['name'],
-            'frenchName': frenchName,
+            'frenchName': pokemon['name'], // Temporaire, sera mis à jour après
             'url': url,
           };
-        }));
+        }).toList();
         
         _isInitialized = true;
         print("Recherche initialisée avec ${_allPokemon.length} Pokémon");
+        
+        // Charger les noms français en arrière-plan
+        _loadFrenchNamesInBackground();
       } else {
         print("Erreur HTTP: ${response.statusCode}");
       }
     } catch (e) {
       print('Error initializing search: $e');
     }
+  }
+
+  static Future<void> _loadFrenchNamesInBackground() async {
+    for (final pokemon in _allPokemon) {
+      try {
+        final frenchName = await _getFrenchName(pokemon['id']);
+        pokemon['frenchName'] = frenchName;
+      } catch (e) {
+        // Ignorer les erreurs pour ne pas bloquer l'application
+      }
+    }
+    print("Noms français chargés en arrière-plan");
   }
 
   static Future<String> _getFrenchName(int id) async {
