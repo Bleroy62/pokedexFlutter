@@ -378,7 +378,7 @@ String _getTypeImageUrl(String type) {
                                       currentPokemon!.frenchTypes.map((type) {
                                         return _buildTypeBadge(
                                           type,
-                                        ); // ← Appel de la nouvelle méthode
+                                        );
                                       }).toList(),
                                 ),
                                 const SizedBox(height: 10),
@@ -418,160 +418,163 @@ String _getTypeImageUrl(String type) {
                                     ),
                                   ),
                                   const SizedBox(height: 8),
-                                  SizedBox(
-                                    height: 80,
-                                    child: Row(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.center,
-                                      children:
-                                          currentPokemon!.evolutionLine.map((
-                                            evolution,
-                                          ) {
-                                            final bool isCurrent =
-                                                evolution.id ==
-                                                currentPokemon!.id;
-                                            return GestureDetector(
-                                              onTap: () {
-                                                setState(() {
-                                                  currentPokemonIndex =
-                                                      evolution.id;
-                                                });
-                                                _loadPokemon(evolution.id);
-                                              },
-                                              child: Container(
-                                                width: 100,
-                                                margin:
-                                                    const EdgeInsets.symmetric(
-                                                      horizontal: 4,
-                                                    ),
-                                                padding: const EdgeInsets.all(
-                                                  6,
-                                                ),
-                                                decoration: BoxDecoration(
-                                                  color:
-                                                      isCurrent
-                                                          ? Colors.red[100]
-                                                          : Colors.white,
-                                                  borderRadius:
-                                                      BorderRadius.circular(12),
-                                                  border: Border.all(
+                                  SingleChildScrollView(
+                                    scrollDirection: Axis.horizontal,
+                                    child: SizedBox(
+                                      height: 80,
+                                      child: Row(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.center,
+                                        children:
+                                            currentPokemon!.evolutionLine.map((
+                                              evolution,
+                                            ) {
+                                              final bool isCurrent =
+                                                  evolution.id ==
+                                                  currentPokemon!.id;
+                                              return GestureDetector(
+                                                onTap: () {
+                                                  setState(() {
+                                                    currentPokemonIndex =
+                                                        evolution.id;
+                                                  });
+                                                  _loadPokemon(evolution.id);
+                                                },
+                                                child: Container(
+                                                  width: 100,
+                                                  margin:
+                                                      const EdgeInsets.symmetric(
+                                                        horizontal: 4,
+                                                      ),
+                                                  padding: const EdgeInsets.all(
+                                                    6,
+                                                  ),
+                                                  decoration: BoxDecoration(
                                                     color:
                                                         isCurrent
-                                                            ? Colors.red[800]!
-                                                            : Colors.grey[300]!,
-                                                    width: isCurrent ? 2 : 1,
-                                                  ),
-                                                  boxShadow: [
-                                                    BoxShadow(
-                                                      color: Colors.black
-                                                          .withOpacity(0.1),
-                                                      blurRadius: 4,
-                                                      offset: const Offset(
-                                                        0,
-                                                        2,
-                                                      ),
+                                                            ? Colors.red[100]
+                                                            : Colors.white,
+                                                    borderRadius:
+                                                        BorderRadius.circular(12),
+                                                    border: Border.all(
+                                                      color:
+                                                          isCurrent
+                                                              ? Colors.red[800]!
+                                                              : Colors.grey[300]!,
+                                                      width: isCurrent ? 2 : 1,
                                                     ),
-                                                  ],
-                                                ),
-                                                child: Column(
-                                                  mainAxisSize:
-                                                      MainAxisSize.min,
-                                                  mainAxisAlignment:
-                                                      MainAxisAlignment.center,
-                                                  children: [
-                                                    // Image du Pokémon
-                                                    Container(
-                                                      width: 50,
-                                                      height: 44,
-                                                      decoration: BoxDecoration(
-                                                        color: Colors.blue[50],
-                                                        borderRadius:
-                                                            BorderRadius.circular(
-                                                              25,
-                                                            ),
-                                                        border: Border.all(
-                                                          color:
-                                                              Colors.grey[300]!,
+                                                    boxShadow: [
+                                                      BoxShadow(
+                                                        color: Colors.black
+                                                            .withOpacity(0.1),
+                                                        blurRadius: 4,
+                                                        offset: const Offset(
+                                                          0,
+                                                          2,
                                                         ),
                                                       ),
-                                                      child: Image.network(
-                                                        evolution.imageUrl,
-                                                        fit: BoxFit.contain,
-                                                        loadingBuilder: (
-                                                          context,
-                                                          child,
-                                                          loadingProgress,
-                                                        ) {
-                                                          if (loadingProgress ==
-                                                              null) {
-                                                            return child;
-                                                          }
-                                                          return Center(
-                                                            child: CircularProgressIndicator(
-                                                              value:
-                                                                  loadingProgress
-                                                                              .expectedTotalBytes !=
-                                                                          null
-                                                                      ? loadingProgress
-                                                                              .cumulativeBytesLoaded /
-                                                                          loadingProgress
-                                                                              .expectedTotalBytes!
-                                                                      : null,
-                                                            ),
-                                                          );
-                                                        },
-                                                        errorBuilder: (
-                                                          context,
-                                                          error,
-                                                          stackTrace,
-                                                        ) {
-                                                          return Center(
-                                                            child: Text(
-                                                              evolution
-                                                                  .formattedId
-                                                                  .replaceAll(
-                                                                    '#',
-                                                                    '',
-                                                                  ),
-                                                              style: TextStyle(
-                                                                fontSize: 8,
-                                                                fontWeight:
-                                                                    FontWeight
-                                                                        .bold,
-                                                                color:
-                                                                    Colors
-                                                                        .red[800],
+                                                    ],
+                                                  ),
+                                                  child: Column(
+                                                    mainAxisSize:
+                                                        MainAxisSize.min,
+                                                    mainAxisAlignment:
+                                                        MainAxisAlignment.center,
+                                                    children: [
+                                                      // Image du Pokémon
+                                                      Container(
+                                                        width: 50,
+                                                        height: 44,
+                                                        decoration: BoxDecoration(
+                                                          color: Colors.blue[50],
+                                                          borderRadius:
+                                                              BorderRadius.circular(
+                                                                25,
                                                               ),
-                                                            ),
-                                                          );
-                                                        },
+                                                          border: Border.all(
+                                                            color:
+                                                                Colors.grey[300]!,
+                                                          ),
+                                                        ),
+                                                        child: Image.network(
+                                                          evolution.imageUrl,
+                                                          fit: BoxFit.contain,
+                                                          loadingBuilder: (
+                                                            context,
+                                                            child,
+                                                            loadingProgress,
+                                                          ) {
+                                                            if (loadingProgress ==
+                                                                null) {
+                                                              return child;
+                                                            }
+                                                            return Center(
+                                                              child: CircularProgressIndicator(
+                                                                value:
+                                                                    loadingProgress
+                                                                                .expectedTotalBytes !=
+                                                                            null
+                                                                        ? loadingProgress
+                                                                                .cumulativeBytesLoaded /
+                                                                            loadingProgress
+                                                                                .expectedTotalBytes!
+                                                                        : null,
+                                                              ),
+                                                            );
+                                                          },
+                                                          errorBuilder: (
+                                                            context,
+                                                            error,
+                                                            stackTrace,
+                                                          ) {
+                                                            return Center(
+                                                              child: Text(
+                                                                evolution
+                                                                    .formattedId
+                                                                    .replaceAll(
+                                                                      '#',
+                                                                      '',
+                                                                    ),
+                                                                style: TextStyle(
+                                                                  fontSize: 8,
+                                                                  fontWeight:
+                                                                      FontWeight
+                                                                          .bold,
+                                                                  color:
+                                                                      Colors
+                                                                          .red[800],
+                                                                ),
+                                                              ),
+                                                            );
+                                                          },
+                                                        ),
                                                       ),
-                                                    ),
-                                                    const SizedBox(height: 4),
-                                                    Text(
-                                                      evolution.formattedName,
-                                                      style: TextStyle(
-                                                        fontSize: 11,
-                                                        fontWeight:
-                                                            FontWeight.w500,
-                                                        color:
-                                                            isCurrent
-                                                                ? Colors
-                                                                    .red[800]
-                                                                : Colors
-                                                                    .black87,
+                                                      const SizedBox(height: 4),
+                                                      Text(
+                                                        evolution.formattedName,
+                                                        style: TextStyle(
+                                                          fontSize: 11,
+                                                          fontWeight:
+                                                              FontWeight.w500,
+                                                          color:
+                                                              isCurrent
+                                                                  ? Colors
+                                                                      .red[800]
+                                                                  : Colors
+                                                                      .black87,
+                                                        ),
+                                                        textAlign:
+                                                            TextAlign.center,
+                                                        maxLines: 2,
+                                                        overflow:
+                                                            TextOverflow.ellipsis,
                                                       ),
-                                                      textAlign:
-                                                          TextAlign.center,
-                                                      maxLines: 2,
-                                                      overflow:
-                                                          TextOverflow.ellipsis,
-                                                    ),
-                                                  ],
+                                                    ],
+                                                  ),
                                                 ),
-                                              ),
-                                            );
-                                          }).toList(),
+                                              );
+                                            }).toList(),
+                                      ),
                                     ),
                                   ),
                                 ] else ...[
