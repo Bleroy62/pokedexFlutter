@@ -461,7 +461,7 @@ String _getTypeImageUrl(String type) {
                                                           isCurrent
                                                               ? Colors.red[800]!
                                                               : Colors.grey[300]!,
-                                                      width: isCurrent ? 2 : 1,
+                                                      width: isCurrent ? 1 : 1,
                                                     ),
                                                     boxShadow: [
                                                       BoxShadow(
